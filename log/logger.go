@@ -57,3 +57,8 @@ func Warnf(format string, args ...interface{}) {
 func Infof(format string, args ...interface{}) {
 	Printf("[INFO] "+format, args...)
 }
+
+// Verbosef writes a log entry.
+func Verbosef(format string, args ...interface{}) {
+	Printf("[VERBOSE] "+format, args...)
+}

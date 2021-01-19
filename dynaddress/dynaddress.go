@@ -2,7 +2,6 @@ package dynaddress
 
 import (
 	"golang.org/x/net/publicsuffix"
-	"net"
 	"strings"
 )
 
@@ -16,8 +15,9 @@ type DynAddress struct {
 	SubDomain string `json:"sub-domain"`
 	// The TTL for the DNS record.. default is 300s (5mins).
 	// It could be that your DNS provider does not support such a low TTL
-	TTL int    `json:"ttl"`
-	IP  net.IP `json:"ip"`
+	TTL  int    `json:"ttl"`
+	IP   string `json:"ip"`
+	Type string `json:"type"`
 }
 
 func ParseHost(host string) (*DynAddress, error) {

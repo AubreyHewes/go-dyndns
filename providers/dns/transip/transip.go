@@ -7,11 +7,9 @@ import (
 	"github.com/AubreyHewes/update-dynamic-host/v1/config/env"
 	"github.com/AubreyHewes/update-dynamic-host/v1/dynaddress"
 	"github.com/AubreyHewes/update-dynamic-host/v1/log"
+	"github.com/transip/gotransip/v6"
 	domain2 "github.com/transip/gotransip/v6/domain"
 	"github.com/transip/gotransip/v6/repository"
-	"sync"
-
-	"github.com/transip/gotransip/v6"
 )
 
 // Config is used to configure the creation of the DNSProvider
@@ -30,9 +28,9 @@ func NewDefaultConfig() *Config {
 
 // DNSProvider describes a provider for TransIP
 type DNSProvider struct {
-	config       *Config
-	client       repository.Client
-	dnsEntriesMu sync.Mutex
+	config *Config
+	client repository.Client
+	//dnsEntriesMu sync.Mutex
 }
 
 // NewDNSProvider returns a DNSProvider instance configured for TransIP.
@@ -81,27 +79,30 @@ func (d *DNSProvider) Update(dynAddress *dynaddress.DynAddress) error {
 	dnsEntry := domain2.DNSEntry{
 		Name:    dynAddress.SubDomain,
 		Expire:  dynAddress.TTL, // d.config.TTL
-		Type:    "A",
-		Content: dynAddress.IP.String(),
+		Type:    dynAddress.Type,
+		Content: dynAddress.IP,
 	}
 
 	for i := range dnsEntries {
-		if dnsEntries[i].Name == dnsEntry.Name {
+		if dnsEntries[i].Name == dnsEntry.Name && dnsEntries[i].Type == dnsEntry.Type {
 			// Found!
+			if dnsEntries[i].Content == dnsEntry.Content {
+				log.Infof("Nothing to do for %v", dnsEntry)
+				return nil
+			}
 			log.Infof("Updating existing record for %v", dnsEntry)
 			err = repo.UpdateDNSEntry(dynAddress.Domain, dnsEntry)
 
 			if err != nil {
-				return fmt.Errorf("transip: %v", err)
+				return err
 			}
 
 			return nil
 		}
 	}
 
-	log.Infof("Creating new record")
+	log.Infof("Creating new record  %v", dnsEntry)
 	err = repo.AddDNSEntry(dynAddress.Domain, dnsEntry)
-
 	if err != nil {
 		return fmt.Errorf("transip: %v", err)
 	}

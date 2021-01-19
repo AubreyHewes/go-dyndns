@@ -26,35 +26,39 @@ func createUpdate() cli.Command {
 func update(ctx *cli.Context) error {
 	host := ctx.String("host")
 
-	dynAddress, err := dynaddress.ParseHost(host)
+	dnsRecord, err := dynaddress.ParseHost(host)
 	if err != nil {
 		log.Fatalf("could not parse host: %v", err)
 	}
 
-	ipProvider, err := ipProviderFactory.NewIPProviderByName("ifconfig")
-	if err != nil {
-		log.Fatalf("ip provider error: %v", err)
-	}
-
-	ip, err := ipProvider.GetIP()
-	if err != nil {
-		log.Fatalf("could not get IP: %v", err)
-	}
-	log.Infof("Got IP: %s", ip)
-
-	dynAddress.IP = ip
-	dynAddress.TTL = int(env.GetOrDefaultInt("DYNAMIC_HOST_TTL", 60))
-
-	log.Infof("Got dynAddress: %v", dynAddress)
-
 	dnsProvider, err := dnsProviderFactory.NewDNSProviderByName("transip")
 	if err != nil {
-		log.Fatalf("dns provider error: %v", err)
+		log.Fatalf("DNS Provider error: %v", err)
 	}
 
-	err = dnsProvider.Update(dynAddress)
+	ipProvider, err := ipProviderFactory.NewIPProviderByName("default")
 	if err != nil {
-		log.Fatalf("dns provider error: %v", err)
+		log.Fatalf("IP Provider error: %v", err)
+	}
+
+	ips, err := ipProvider.GetIPs()
+	if err != nil {
+		log.Fatalf("Could not get IPs: %v", err)
+	}
+	log.Infof("Got IPs: %s", ips)
+
+	for i := range ips {
+		ip := ips[i]
+		dnsRecord.IP = ip.IP.String()
+		dnsRecord.TTL = int(env.GetOrDefaultInt("DYNAMIC_HOST_TTL", 60))
+		dnsRecord.Type = ip.Type
+
+		log.Verbosef("DNS record: %v", dnsRecord)
+
+		err = dnsProvider.Update(dnsRecord)
+		if err != nil {
+			log.Fatalf("DNS Provider error: %v", err)
+		}
 	}
 
 	log.Infof("It has been done!")
