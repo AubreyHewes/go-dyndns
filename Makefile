@@ -4,7 +4,7 @@ export GO111MODULE=on
 
 SRCS = $(shell git ls-files '*.go' | grep -v '^vendor/')
 
-APP_NAME := "dyndns"
+APP_NAME := dyndns
 TAG_NAME := $(shell git tag -l --contains HEAD)
 VERSION_TAG := $(shell git describe --tags)
 VERSION_SHA := $(shell git rev-parse --short HEAD)
@@ -12,38 +12,56 @@ VERSION := $(VERSION_TAG)
 
 DOCKER_IMAGE := AubreyHewes/$(APP_NAME)
 
+APP_NAME_CLI := $(APP_NAME)-cli
 MAIN_DIRECTORY_CLI := ./cmd/$(APP_NAME)/
 ifeq (${GOOS}, windows)
-    BIN_OUTPUT_CLI := dist/$(APP_NAME).exe
+    BIN_OUTPUT_CLI := $(APP_NAME).exe
 else
-    BIN_OUTPUT_CLI := dist/$(APP_NAME)
+    BIN_OUTPUT_CLI := $(APP_NAME)
 endif
 
+APP_NAME_UI := $(APP_NAME)-ui
 MAIN_DIRECTORY_UI := ./ui/
 ifeq (${GOOS}, windows)
-    BIN_OUTPUT_UI := dist/$(APP_NAME)-ui.exe
+    BIN_OUTPUT_UI := $(APP_NAME_UI).exe
 else
-    BIN_OUTPUT_UI := dist/$(APP_NAME)-ui
+    BIN_OUTPUT_UI := $(APP_NAME_UI)
 endif
 
-default: clean generate-dns checks test build build-ui
+default: clean generate-dns checks test build
 
 clean:
 	rm -rf dist/ builds/ cover.out
 
-build-ui: clean build
-	@echo Version: $(VERSION)
-	@echo GOROOT: $(GOROOT)
-	@echo GOPATH: $(GOPATH)
-	go build -v -ldflags '-X "main.name=${APP_NAME}" -X "main.version=${VERSION}"' -o ${BIN_OUTPUT_UI} ${MAIN_DIRECTORY_UI}
+build: clean build-cli build-ui
 
-build: clean
+build-ui: clean
+	@echo Name: $(APP_NAME_UI)
 	@echo Version: $(VERSION)
 	@echo GOROOT: $(GOROOT)
 	@echo GOPATH: $(GOPATH)
-	go build -v -ldflags '-X "main.name=${APP_NAME}-ui" -X "main.version=${VERSION}"' -o ${BIN_OUTPUT_CLI} ${MAIN_DIRECTORY_CLI}
+	go build -v -ldflags '-X "main.name=${APP_NAME_UI}" -X "main.version=${VERSION}"' -o builds/${BIN_OUTPUT_UI} ${MAIN_DIRECTORY_UI}
+
+build-cli: clean
+	@echo Name: $(APP_NAME_CLI)
+	@echo Version: $(VERSION)
+	@echo GOROOT: $(GOROOT)
+	@echo GOPATH: $(GOPATH)
+	go build -v -ldflags '-X "main.name=${APP_NAME_CLI}" -X "main.version=${VERSION}"' -o builds/${BIN_OUTPUT_CLI} ${MAIN_DIRECTORY_CLI}
+
+dist: clean dist-cli dist-ui image
+
+UPX_FLAGS := --brute
+dist-cli: build-cli
+	mkdir dist
+	upx $(UPX_FLAGS) builds/${BIN_OUTPUT_CLI} -o dist/${BIN_OUTPUT_CLI}
+
+dist-ui: build-ui
+	mkdir dist
+	upx $(UPX_FLAGS) builds/${BIN_OUTPUT_UI} -o dist/${BIN_OUTPUT_UI}
 
 image:
+	@echo Name: $(DOCKER_IMAGE)
 	@echo Version: $(VERSION)
 	docker build -t $(DOCKER_IMAGE) .
 
