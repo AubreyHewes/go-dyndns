@@ -6,20 +6,24 @@ SRCS = $(shell git ls-files '*.go' | grep -v '^vendor/')
 
 LEDGO_IMAGE := aubreyhewes/update-dynamic-host
 MAIN_DIRECTORY := ./cmd/update-dynamic-host/
+
+MAIN_DIRECTORY_CLI := ./cmd/$(APP_NAME)/
 ifeq (${GOOS}, windows)
-    BIN_OUTPUT := dist/update-dynamic-host.exe
+    BIN_OUTPUT_UI := dist/$(APP_NAME)-ui.exe
 else
-    BIN_OUTPUT := dist/update-dynamic-host
+    BIN_OUTPUT_UI := dist/$(APP_NAME)-ui
 endif
 
-TAG_NAME := $(shell git tag -l --contains HEAD)
-SHA := $(shell git rev-parse HEAD)
-VERSION := $(if $(TAG_NAME),$(TAG_NAME),$(SHA))
-
-default: clean generate-dns checks test build
+default: clean generate-dns checks test build build-ui
 
 clean:
 	rm -rf dist/ builds/ cover.out
+
+build-ui: clean build
+	@echo Version: $(VERSION)
+	@echo GOROOT: $(GOROOT)
+	@echo GOPATH: $(GOPATH)
+	go build -v -ldflags '-X "main.name=${APP_NAME}" -X "main.version=${VERSION}"' -o ${BIN_OUTPUT_UI} ${MAIN_DIRECTORY_UI}
 
 build: clean
 	@echo Version: $(VERSION)
