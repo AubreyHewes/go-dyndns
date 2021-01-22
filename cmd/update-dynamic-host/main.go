@@ -1,46 +1,51 @@
-// CLI application for changing logitech device led's
+// CLI application for dynamic dns
 package main
 
 import (
 	"fmt"
 	"github.com/AubreyHewes/update-dynamic-host/v1/cmd"
+	"github.com/urfave/cli/v2"
 	"log"
 	"os"
 	"path/filepath"
-
-	//"path/filepath"
 	"runtime"
-
-	//"github.com/AubreyHewes/ledgo/v1/cmd"
-	"github.com/urfave/cli/v2"
 )
 
 var (
+	name    = "dyndns"
 	version = "dev"
 )
 
 func main() {
 	app := &cli.App{}
-	app.Name = "update-dynamic-host"
-	app.HelpName = "update-dynamic-host"
-	app.Usage = "Dynamic IP controller"
+	app.Name = name
+	app.HelpName = name
+	app.Usage = "Dynamic DNS CLI"
 	app.EnableBashCompletion = true
-
 	app.Version = version
+
 	cli.VersionPrinter = func(c *cli.Context) {
-		fmt.Printf("update-dynamic-host version %s %s/%s\n", c.App.Version, runtime.GOOS, runtime.GOARCH)
+		fmt.Printf("%s version %s %s/%s\n", c.App.Name, c.App.Version, runtime.GOOS, runtime.GOARCH)
 	}
+
 	cli.VersionFlag = &cli.BoolFlag{
 		Name:  "version",
 		Usage: "print the version",
 	}
 
-	defaultPath := ""
-	cwd, err := os.Getwd()
+	appConfigDir := fmt.Sprintf(".%s", name)
+
+	userConfigDir, err := os.UserConfigDir()
 	if err == nil {
-		defaultPath = filepath.Join(cwd, ".update-dynamic-host")
+		appConfigDir = filepath.Join(userConfigDir, appConfigDir)
+	} else {
+		cwd, err := os.Getwd()
+		if err == nil {
+			appConfigDir = filepath.Join(cwd, appConfigDir)
+		}
 	}
-	app.Flags = cmd.CreateFlags(defaultPath)
+
+	app.Flags = cmd.CreateFlags(appConfigDir)
 
 	//app.Before = cmd.Before
 
