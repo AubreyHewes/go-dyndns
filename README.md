@@ -1,20 +1,24 @@
-# go-dyndns - Yet another Dynamic DNS Tool, this one in GO
+# Yet another Dynamic DNS Tool, this one in GO
 
-Determine remote IPs (IPv4 and IPv6) and adds/updates records to your DNS provider.
+A tool to determine remote IPs (IPv4 and IPv6) and adds/updates records to your DNS provider.
 
 ## Usage
 
 ````shell
-go-dyndns --dns provider --host this.is.my.domain.tld
+go-dyndns update --dns provider --host this.is.my.domain.tld
 ````
 
 ## Building
 
-    make build-cli
+````shell
+make build-cli
+````
 
 Or for a compressed binary, using [upx](https://github.com/upx/upx); note this takes longer!
 
-    make dist-cli
+````shell
+make dist-cli
+````
 
 ## TODO
 
@@ -28,6 +32,6 @@ Or for a compressed binary, using [upx](https://github.com/upx/upx); note this t
 
  * [x] Easy to add new DNS providers
    * [x] [TransIP](https://www.transip.nl/)
-   * [ ] _others..._
+   * [ ] _add others..._
 
  * [ ] Also a UI?
