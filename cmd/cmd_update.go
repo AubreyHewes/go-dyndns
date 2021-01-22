@@ -16,8 +16,14 @@ func createUpdate() cli.Command {
 		Action: update,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  "host",
-				Usage: "Dynamic host to add your current IP to. i.e. great.host.me",
+				Required: true,
+				Name:     "host",
+				Usage:    "Dynamic host to add your current IP to. i.e. great.host.me",
+			},
+			&cli.StringFlag{
+				Required: true,
+				Name:     "dns",
+				Usage:    "DNS provider i.e. transip",
 			},
 		},
 	}
@@ -28,7 +34,7 @@ func update(ctx *cli.Context) error {
 
 	dnsRecord, err := dynaddress.ParseHost(host)
 	if err != nil {
-		log.Fatalf("could not parse host: %v", err)
+		log.Fatalf("Could not parse host: %v", err)
 	}
 
 	dnsProvider, err := dnsProviderFactory.NewDNSProviderByName("transip")
