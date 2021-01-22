@@ -1,10 +1,14 @@
-# Another Dynamic DNS Tool in GO
+# go-dyndns - Yet another Dynamic DNS Tool, this one in GO
 
 ## Usage
 
 ````shell
-dyndns --dns transip --host this.is.my.domain.tld
+go-dyndns --dns transip --host this.is.my.domain.tld
 ````
+
+## Building
+
+    make 
 
 ## Concept
 

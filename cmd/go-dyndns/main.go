@@ -3,7 +3,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/AubreyHewes/update-dynamic-host/v1/cmd"
+	"github.com/AubreyHewes/go-dyndns/v1/cmd"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	name    = "dyndns"
+	name    = "go-dyndns"
 	version = "dev"
 )
 

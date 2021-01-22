@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/AubreyHewes/update-dynamic-host/v1/dynaddress"
-	"github.com/AubreyHewes/update-dynamic-host/v1/log"
-	dns2 "github.com/AubreyHewes/update-dynamic-host/v1/providers/dns"
+	"github.com/AubreyHewes/go-dyndns/v1/dynaddress"
+	"github.com/AubreyHewes/go-dyndns/v1/log"
+	dns2 "github.com/AubreyHewes/go-dyndns/v1/providers/dns"
 	"github.com/urfave/cli/v2"
 )
 

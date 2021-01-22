@@ -3,8 +3,8 @@ package providers_ip_default
 import (
 	"bytes"
 	"fmt"
-	"github.com/AubreyHewes/update-dynamic-host/v1/log"
-	"github.com/AubreyHewes/update-dynamic-host/v1/providers/ip/types"
+	"github.com/AubreyHewes/go-dyndns/v1/log"
+	"github.com/AubreyHewes/go-dyndns/v1/providers/ip/types"
 	"io/ioutil"
 	"net"
 	"net/http"

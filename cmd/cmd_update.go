@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"github.com/AubreyHewes/update-dynamic-host/v1/config/env"
-	"github.com/AubreyHewes/update-dynamic-host/v1/dynaddress"
-	"github.com/AubreyHewes/update-dynamic-host/v1/log"
-	dnsProviderFactory "github.com/AubreyHewes/update-dynamic-host/v1/providers/dns"
-	ipProviderFactory "github.com/AubreyHewes/update-dynamic-host/v1/providers/ip"
+	"github.com/AubreyHewes/go-dyndns/v1/config/env"
+	"github.com/AubreyHewes/go-dyndns/v1/dynaddress"
+	"github.com/AubreyHewes/go-dyndns/v1/log"
+	dnsProviderFactory "github.com/AubreyHewes/go-dyndns/v1/providers/dns"
+	ipProviderFactory "github.com/AubreyHewes/go-dyndns/v1/providers/ip"
 	"github.com/urfave/cli/v2"
 )
 

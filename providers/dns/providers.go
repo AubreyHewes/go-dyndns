@@ -2,8 +2,8 @@ package dns
 
 import (
 	"fmt"
-	"github.com/AubreyHewes/update-dynamic-host/v1/dynaddress"
-	"github.com/AubreyHewes/update-dynamic-host/v1/providers/dns/transip"
+	"github.com/AubreyHewes/go-dyndns/v1/dynaddress"
+	"github.com/AubreyHewes/go-dyndns/v1/providers/dns/transip"
 )
 
 type Provider interface {

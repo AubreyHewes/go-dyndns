@@ -1,4 +1,4 @@
-module github.com/AubreyHewes/update-dynamic-host/v1
+module github.com/AubreyHewes/go-dyndns/v1
 
 go 1.13
 

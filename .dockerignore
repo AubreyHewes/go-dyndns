@@ -1,5 +1,5 @@
-dynip.exe
-.dynip
+builds/
+dist/
 .gitcookies
 .idea
 .vscode/

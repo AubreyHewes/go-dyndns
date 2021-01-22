@@ -2,8 +2,8 @@ package ip
 
 import (
 	"fmt"
-	"github.com/AubreyHewes/update-dynamic-host/v1/providers/ip/default"
-	"github.com/AubreyHewes/update-dynamic-host/v1/providers/ip/types"
+	"github.com/AubreyHewes/go-dyndns/v1/providers/ip/default"
+	"github.com/AubreyHewes/go-dyndns/v1/providers/ip/types"
 )
 
 // NewIPProviderByName Factory for IP providers

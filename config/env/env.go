@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AubreyHewes/update-dynamic-host/v1/log"
+	"github.com/AubreyHewes/go-dyndns/v1/log"
 )
 
 // Get environment variables

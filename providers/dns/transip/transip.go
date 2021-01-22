@@ -4,9 +4,9 @@ package transip
 import (
 	"errors"
 	"fmt"
-	"github.com/AubreyHewes/update-dynamic-host/v1/config/env"
-	"github.com/AubreyHewes/update-dynamic-host/v1/dynaddress"
-	"github.com/AubreyHewes/update-dynamic-host/v1/log"
+	"github.com/AubreyHewes/go-dyndns/v1/config/env"
+	"github.com/AubreyHewes/go-dyndns/v1/dynaddress"
+	"github.com/AubreyHewes/go-dyndns/v1/log"
 	"github.com/transip/gotransip/v6"
 	domain2 "github.com/transip/gotransip/v6/domain"
 	"github.com/transip/gotransip/v6/repository"
