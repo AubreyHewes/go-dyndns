@@ -6,8 +6,9 @@ SRCS = $(shell git ls-files '*.go' | grep -v '^vendor/')
 
 APP_NAME := "dyndns"
 TAG_NAME := $(shell git tag -l --contains HEAD)
-SHA := $(shell git rev-parse --short HEAD)
-VERSION := $(if $(TAG_NAME),$(TAG_NAME),$(SHA))
+VERSION_TAG := $(shell git describe --tags)
+VERSION_SHA := $(shell git rev-parse --short HEAD)
+VERSION := $(VERSION_TAG)
 
 DOCKER_IMAGE := AubreyHewes/$(APP_NAME)
 
