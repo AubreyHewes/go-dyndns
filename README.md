@@ -16,13 +16,18 @@ Or for a compressed binary, using [upx](https://github.com/upx/upx); note this t
 
     make dist-cli
 
-## Concept
+## TODO
 
-Use an external service to determine current IP(s)
+ * [x] CLI
 
- * [x] external ipv4 service: http://ip4only.me/api/
- * [x] external ipv6 service: http://ip6only.me/api/
+ * [x] Use an external service to determine current IP(s)
+     * [x] external ipv4 service: http://ip4only.me/api/
+     * [x] external ipv6 service: http://ip6only.me/api/
+ 
+ * [x] Update the found IP(s) to a DNS provider
 
-Update the found IP(s) to a DNS provider
+ * [x] Easy to add new DNS providers
+   * [x] [TransIP](https://www.transip.nl/)
+   * [ ] _others..._
 
- * [x] easy to add new DNS providers
+ * [ ] Also a UI?
