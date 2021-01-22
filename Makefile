@@ -4,10 +4,21 @@ export GO111MODULE=on
 
 SRCS = $(shell git ls-files '*.go' | grep -v '^vendor/')
 
-LEDGO_IMAGE := aubreyhewes/update-dynamic-host
-MAIN_DIRECTORY := ./cmd/update-dynamic-host/
+APP_NAME := "dyndns"
+TAG_NAME := $(shell git tag -l --contains HEAD)
+SHA := $(shell git rev-parse --short HEAD)
+VERSION := $(if $(TAG_NAME),$(TAG_NAME),$(SHA))
+
+DOCKER_IMAGE := AubreyHewes/$(APP_NAME)
 
 MAIN_DIRECTORY_CLI := ./cmd/$(APP_NAME)/
+ifeq (${GOOS}, windows)
+    BIN_OUTPUT_CLI := dist/$(APP_NAME).exe
+else
+    BIN_OUTPUT_CLI := dist/$(APP_NAME)
+endif
+
+MAIN_DIRECTORY_UI := ./ui/
 ifeq (${GOOS}, windows)
     BIN_OUTPUT_UI := dist/$(APP_NAME)-ui.exe
 else
@@ -29,17 +40,17 @@ build: clean
 	@echo Version: $(VERSION)
 	@echo GOROOT: $(GOROOT)
 	@echo GOPATH: $(GOPATH)
-	go build -v -ldflags '-X "main.version=${VERSION}"' -o ${BIN_OUTPUT} ${MAIN_DIRECTORY}
+	go build -v -ldflags '-X "main.name=${APP_NAME}-ui" -X "main.version=${VERSION}"' -o ${BIN_OUTPUT_CLI} ${MAIN_DIRECTORY_CLI}
 
 image:
 	@echo Version: $(VERSION)
-	docker build -t $(LEDGO_IMAGE) .
+	docker build -t $(DOCKER_IMAGE) .
 
 test: clean
 	go test -v -cover ./...
 
 e2e: clean
-	LEDGO_E2E_TESTS=local go test -count=1 -v ./e2e/...
+	E2E_TESTS=local go test -count=1 -v ./e2e/...
 
 checks:
 	golangci-lint run
