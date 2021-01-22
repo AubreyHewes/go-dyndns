@@ -28,7 +28,7 @@ else
     BIN_OUTPUT_UI := $(APP_NAME_UI)
 endif
 
-default: clean generate-dns checks test build
+default: clean generate-dns checks test build dist
 
 clean:
 	rm -rf dist/ builds/ cover.out
@@ -40,23 +40,23 @@ build-ui: clean
 	@echo Version: $(VERSION)
 	@echo GOROOT: $(GOROOT)
 	@echo GOPATH: $(GOPATH)
-	go build -v -ldflags '-X "main.name=${APP_NAME_UI}" -X "main.version=${VERSION}"' -o builds/${BIN_OUTPUT_UI} ${MAIN_DIRECTORY_UI}
+	go build -v -ldflags '-s -w -X "main.name=${APP_NAME_UI}" -X "main.version=${VERSION}"' -o builds/${BIN_OUTPUT_UI} ${MAIN_DIRECTORY_UI}
 
 build-cli: clean
 	@echo Name: $(APP_NAME_CLI)
 	@echo Version: $(VERSION)
 	@echo GOROOT: $(GOROOT)
 	@echo GOPATH: $(GOPATH)
-	go build -v -ldflags '-X "main.name=${APP_NAME_CLI}" -X "main.version=${VERSION}"' -o builds/${BIN_OUTPUT_CLI} ${MAIN_DIRECTORY_CLI}
+	go build -v -ldflags '-s -w -X "main.name=${APP_NAME}" -X "main.version=${VERSION}"' -o builds/${BIN_OUTPUT_CLI} ${MAIN_DIRECTORY_CLI}
 
 dist: clean dist-cli dist-ui image
 
-UPX_FLAGS := --brute
-dist-cli: build-cli
+UPX_FLAGS := --color --ultra-brute
+dist-cli: clean build-cli
 	mkdir dist
 	upx $(UPX_FLAGS) builds/${BIN_OUTPUT_CLI} -o dist/${BIN_OUTPUT_CLI}
 
-dist-ui: build-ui
+dist-ui: clean build-ui
 	mkdir dist
 	upx $(UPX_FLAGS) builds/${BIN_OUTPUT_UI} -o dist/${BIN_OUTPUT_UI}
 
