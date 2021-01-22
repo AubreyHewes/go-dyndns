@@ -6,11 +6,9 @@ SRCS = $(shell git ls-files '*.go' | grep -v '^vendor/')
 
 APP_NAME := go-dyndns
 TAG_NAME := $(shell git tag -l --contains HEAD)
-VERSION_TAG := $(shell git describe --tags)
+VERSION_TAG := $(shell git describe --tags --contains HEAD)
 VERSION_SHA := $(shell git rev-parse --short HEAD)
 VERSION := $(VERSION_TAG)
-
-DOCKER_IMAGE := aubreyhewes/$(APP_NAME)
 
 APP_NAME_CLI := $(APP_NAME)-cli
 MAIN_DIRECTORY_CLI := ./cmd/$(APP_NAME)/
@@ -61,9 +59,9 @@ dist-ui: clean build-ui
 	upx $(UPX_FLAGS) builds/${BIN_OUTPUT_UI} -o dist/${BIN_OUTPUT_UI}
 
 image:
-	@echo Name: $(DOCKER_IMAGE)
+	@echo Name: $(APP_NAME)-docker
 	@echo Version: $(VERSION)
-	docker build -t $(DOCKER_IMAGE) .
+	docker build -t $(APP_NAME) .
 
 test: clean
 	go test -v -cover ./...

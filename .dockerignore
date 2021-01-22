@@ -1,8 +1,18 @@
-builds/
-dist/
-.gitcookies
+# ide stuff
 .idea
 .vscode/
+
+# git stuff
+.gitcookies
+
+# build artifacts
 dist/
 builds/
 docs/
+
+# docker
+Dockerfile
+.dockerfile
+
+# misc files that should not trigger a docker build
+README.md
